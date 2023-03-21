@@ -33,15 +33,16 @@ router.get('/assignments/:clientId', async (request: Request, response: Response
 
 router.post('/assignments', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const ObjectUserId = new Schema.Types.ObjectId(request.body.user_id)
-        const ObjectClientId = new Schema.Types.ObjectId(request.body.client_id)
-        request.body.user_id = ObjectUserId
-        request.body.client_id = ObjectClientId
-        request.body.imageFile = request.files?.imageFile
-        const assignment = new AssignmentModel(request.body);
-        const addedAssignments = await assignmentsLogic.addAssignment(assignment);
+        console.log(request.body)
+        // const ObjectUserId = new Schema.Types.ObjectId(request.body.user_id)
+        // const ObjectClientId = new Schema.Types.ObjectId(request.body.client_id)
+        // request.body.user_id = ObjectUserId
+        // request.body.client_id = ObjectClientId
+        // request.body.imageFile = request.files?.imageFile
+        // const assignment = new AssignmentModel(request.body);
+        // const addedAssignments = await assignmentsLogic.addAssignment(assignment);
 
-        response.status(201).json(addedAssignments);
+        // response.status(201).json(addedAssignments);
     } catch (err: any) {
         next(err);
     }
