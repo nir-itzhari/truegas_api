@@ -33,7 +33,7 @@ router.get('/assignments/:clientId', async (request: Request, response: Response
 
 router.post('/assignments', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        console.log(request.body)
+        console.log(request.body)  
         // const ObjectUserId = new Schema.Types.ObjectId(request.body.user_id)
         // const ObjectClientId = new Schema.Types.ObjectId(request.body.client_id)
         // request.body.user_id = ObjectUserId
