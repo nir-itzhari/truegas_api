@@ -27,5 +27,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/truegas
        
