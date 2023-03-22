@@ -18,10 +18,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker build . 
+        run: docker build . --file Dockerfile --tag truegas
 
       - name: Docker Push
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas
+        run: docker push truegas
       # - name: Build and push Docker image
       #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       #   with:
