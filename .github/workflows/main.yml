@@ -21,7 +21,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/backend
 
       - name: Docker Push
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/latest
       # - name: Build and push Docker image
       #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       #   with:
