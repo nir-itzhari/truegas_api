@@ -27,5 +27,5 @@ jobs:
 
       - name: Docker Push to registry
         run:
-          docker tag truegas-backend-db-server ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+          # docker tag ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }
