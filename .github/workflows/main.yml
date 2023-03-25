@@ -19,7 +19,7 @@ jobs:
 
       - name: Build and tag the Docker image
         run: |
-          docker compose build --t ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+          docker compose build
           docker tag ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }} ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
 
       - name: Push the Docker image to Docker Hub
