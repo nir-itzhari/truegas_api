@@ -25,4 +25,4 @@ jobs:
       - name: Push the Docker image to Docker Hub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/truegas:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
