@@ -22,6 +22,6 @@ jobs:
         run: docker-compose build --file docker-compose --tag ${{ secrets.DOCKER_USERNAME }}/truegas
 
        - name: Docker Push to registry
-        run: docker tag <contanier_name_in_dockercompose>  ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+        run: docker tag backend ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
         run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }} 
 
