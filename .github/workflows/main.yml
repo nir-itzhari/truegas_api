@@ -2,8 +2,8 @@ name: Publish Docker Image to Docker Hub
 
 on:
   push:
-     tags:        
-      - '*'
+    tags:
+      - "*"
 
 jobs:
   build:
@@ -17,11 +17,8 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push
-        uses: isbang/compose-action@v1.4.1
+      - name: Build the Docker image
+        run: docker-compose build
         with:
-          context: .
-          file: docker-compose
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/truegas:latest
-
+          tags: ${{ secrets.DOCKER_USERNAME }}/truegas
