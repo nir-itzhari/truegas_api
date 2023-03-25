@@ -46,9 +46,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker-compose down
+        # run: docker-compose down
         run: docker-compose build
-        run: docker-compose up -d
+        # run: docker-compose up -d
 
       - name: Docker Push to registry
         run: docker tag backend ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
