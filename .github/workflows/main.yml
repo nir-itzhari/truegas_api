@@ -21,7 +21,7 @@ jobs:
         uses: isbang/compose-action@v1.4.1
         with:
           context: .
-          file: ./docker-compose
+          file: docker-compose
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/truegas:latest
 
