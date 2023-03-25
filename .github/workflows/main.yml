@@ -27,5 +27,5 @@ jobs:
 
       - name: Docker Push to registry
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+          docker tag niritz/truegas niritz/truegas:1.0
+          docker push ${{ secrets.DOCKER_USERNAME }}/truegas:1.0
