@@ -11,6 +11,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: "./docker-compose.yml"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -19,7 +22,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/truegas
+        # run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/truegas
+        run: docker-compose build
 
-      - name: Docker Push
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas
+      - name: Docker Push to registry
+        run: docker tag truegasdocker ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }} (edited)
+
