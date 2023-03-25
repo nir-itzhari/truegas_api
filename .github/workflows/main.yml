@@ -2,8 +2,8 @@ name: Publish Docker Image to Docker Hub
 
 on:
   push:
-    tags:
-      - "*"
+     tags:        
+      - '*'
 
 jobs:
   build:
@@ -17,12 +17,11 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and tag the Docker image
-        run: |
-          docker compose build
-          docker tag ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }} ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+      - name: Build the Docker image
+        run: docker-compose build
+        # run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/truegas
 
-      - name: Push the Docker image to Docker Hub
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/truegas
-          docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+      - name: Docker Push to registry
+        # run: docker tag truegasdocker ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas
+
