@@ -27,5 +27,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
+          tags: truegas/${{ github.ref }}
 
