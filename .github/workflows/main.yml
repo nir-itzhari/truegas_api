@@ -26,4 +26,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: truegas/${{ github.ref }}
+          tags: truegas:${{ github.ref }}
