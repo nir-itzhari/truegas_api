@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
@@ -21,9 +22,9 @@ jobs:
       #   run: docker-compose build
       # run: docker build . --file Dockerfile --tag truegas
 
-      - name: Build and push
+      - name: Build and push to Docker Hub
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/truegas:latest, ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+          tags: latest, ${{ github.ref }}
