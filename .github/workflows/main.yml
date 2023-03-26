@@ -22,7 +22,7 @@ jobs:
         # run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/truegas
 
       - name: Create Docker tag
-        run: docker tag truegas ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
