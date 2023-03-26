@@ -18,13 +18,16 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build the Docker image
-        run: |
-          docker-compose down
-          docker-compose build
-          docker-compose up -d
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/truegas
 
-      - name: Docker tag and push to registry
-        run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/truegas
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
