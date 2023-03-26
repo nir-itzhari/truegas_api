@@ -19,10 +19,11 @@ jobs:
 
       # - name: Build the Docker image
       #   run: docker-compose build
-        # run: docker build . --file Dockerfile --tag truegas
+      # run: docker build . --file Dockerfile --tag truegas
 
       - name: Build and push
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@v2
         with:
+          context: .
           push: true
-          tags: truegas:${{ github.ref }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/truegas:latest, ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
