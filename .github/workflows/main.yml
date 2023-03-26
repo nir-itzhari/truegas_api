@@ -20,10 +20,11 @@ jobs:
 
       - name: Build the Docker image
         run: |
+          docker-compose down
           docker-compose build
+          docker-compose up -d
 
-      - name: Docker create tag
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
-
-      - name: Docker push to registry
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
+      - name: Docker tag and push to registry
+        run: |
+          docker tag truegas-backend-db-server ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
