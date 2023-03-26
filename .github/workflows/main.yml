@@ -18,10 +18,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build the Docker image
-        # run: docker-compose build
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/truegas
+        run: docker-compose build
+        # run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/truegas
 
       - name: Docker Tag and Push
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+          docker tag truegas ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
