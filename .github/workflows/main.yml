@@ -18,14 +18,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build the Docker image
-        run: |
-          docker-compose down
-          docker-compose build
-          docker-compose up -d
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Docker create tag
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./docker-compose
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
 
-      - name: Docker push to registry
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
