@@ -19,8 +19,8 @@ jobs:
 
       - name: Build the Docker image
         # run: docker-compose build
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+        run: docker build . --file Dockerfile --tag truegas:${{ github.ref }}
 
       - name: Docker Push to registry
         # run: docker tag truegasdocker ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
