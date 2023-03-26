@@ -27,5 +27,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: truegas/${{ github.ref }}
-
+          tags: latest, ${{ github.ref }}
