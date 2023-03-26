@@ -22,5 +22,5 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag truegas:$GITHUB_SHA ${{ secrets.DOCKER_USERNAME }}/truegas:$GITHUB_SHA
+          docker tag ${{ secrets.DOCKER_USERNAME }}/truegas:$GITHUB_SHA ${{ secrets.DOCKER_USERNAME }}/truegas:$GITHUB_SHA
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:$GITHUB_SHA
