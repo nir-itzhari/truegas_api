@@ -3,7 +3,7 @@ name: Publish Docker Compose to Docker Hub
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   build:
