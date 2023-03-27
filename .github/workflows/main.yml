@@ -8,7 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: ubuntu
 
+    services:
+      truegas:
+        image: niritz/truegas
+        ports:
+          - 3000:3000
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -28,12 +34,11 @@ jobs:
       - name: Docker compose up
         run: docker-compose up -d
 
-      - name: Wait for web application
+      - name: Run container
         run: |
-          sudo apt-get update && sudo apt-get -y install wget
-          wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-          chmod +x wait-for-it.sh
-          ./wait-for-it.sh localhost:3000 --timeout=30 --strict --quiet
+          apt-get update; apt-get install curl -y
+          curl truegas:3000 > curl_result_docker
+          cat curl_result_docker
 
       - name: Check running containers
         run: docker ps -a
