@@ -30,4 +30,7 @@ jobs:
           TAG=${TAG#refs/tags/}  # remove the refs/tags/ prefix
           docker-compose build
           docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
+          docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
+          docker push ${{ secrets.DOCKER_USERNAME }}/truegas:latest
+
