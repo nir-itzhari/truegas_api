@@ -24,7 +24,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/truegas:latest,${{ secrets.DOCKER_USERNAME }}/truegas:${{ github.ref }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/truegas/latest,${{ secrets.DOCKER_USERNAME }}/truegas/${{ github.ref }}
           build-args: |
             DOCKER_TAG=${{ github.ref }}
 
@@ -32,4 +32,4 @@ jobs:
         run: |
           docker-compose pull
           docker-compose up -d
-        working-directory: /path/to/docker-compose/directory
+        working-directory: ./docker-compose
