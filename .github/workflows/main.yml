@@ -8,14 +8,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: node:14.16
+    container:
+      image: ${{ secrets.DOCKER_USERNAME }}/truegas
+      credentials:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: install cli
-        run: apt-get update; apt-get install curl -y
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
@@ -34,6 +35,7 @@ jobs:
 
       - name: Run container
         run: |
+          apt-get update; apt-get install curl -y
           curl truegas:3000 > curl_result_docker
           cat curl_result_docker
 
