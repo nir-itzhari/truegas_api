@@ -33,4 +33,4 @@ jobs:
           docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:latest
-          docker-compose -d
+          docker-compose up -d
