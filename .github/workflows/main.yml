@@ -8,13 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ubuntu
-
-    services:
-      truegas:
-        image: niritz/truegas
-        ports:
-          - 3000:3000
+    container: node:14.16
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
