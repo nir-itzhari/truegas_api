@@ -3,6 +3,7 @@ services:
   app:
     image: niritz/truegas
     hostname: truegasdocker
+    container_name: truegas-backend
     build:
       context: ./
       dockerfile: Dockerfile
