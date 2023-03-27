@@ -29,5 +29,4 @@ jobs:
           TAG=${{ github.ref }}
           docker-compose build
           docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas/$TAG
-          docker push ${{ secrets.DOCKER_USERNAME }}/truegas
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas/$TAG
