@@ -19,24 +19,35 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Docker compose Build
         run: docker-compose build
 
-      - name: Docker compose up
-        run: |
-          docker-compose down
-          docker-compose up -d
-
-      - name: Check running containers
-        run: docker ps -a
-
-      - name: Create Docker tag and push image
+      - name: Create Docker tag
         run: |
           TAG=${{ github.ref }}
           TAG=${TAG#refs/tags/}
           docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
+
+      - name: Docker push image
+        run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:latest
+
+
+
+
+
+
+
+
+
+
+
+
+# - name: Docker compose up
+#   run: |
+#     docker-compose down
+#     docker-compose up -d
+
+# - name: Check running containers
+#   run: docker ps -a
