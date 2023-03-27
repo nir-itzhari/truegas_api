@@ -26,7 +26,7 @@ jobs:
 
       - name: Update NPM
         run: npm install -g npm@9.6.2
-        
+
       - name: Build Docker image
         run: docker-compose build
           # docker-compose down        
@@ -39,4 +39,4 @@ jobs:
           TAG=${TAG#refs/tags/}
           docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
-          docker push ${{ secrets.DOCKER_USERNAME }}/truegas
+          docker push ${{ secrets.DOCKER_USERNAME }}/truegas:latest
