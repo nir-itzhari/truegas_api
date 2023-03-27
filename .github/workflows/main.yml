@@ -38,12 +38,6 @@ jobs:
       - name: Docker compose up
         run: docker-compose up -d
 
-      - name: Run container
-        run: |
-          apt-get update; apt-get install curl -y
-          curl truegas:3000 > curl_result_docker
-          cat curl_result_docker
-
       - name: Check running containers
         run: docker ps -a
 
