@@ -21,9 +21,6 @@ jobs:
 
       - name: Build Docker image
         run: docker-compose build
-          # docker-compose down        
-          # docker-compose up -d
-          # docker-compose ps
 
       - name: Create Docker tag and push image
         run: |
