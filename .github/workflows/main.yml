@@ -13,10 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install docker-compose
+      # - name: Install Docker Compose
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get -y install docker-compose
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
@@ -28,6 +28,6 @@ jobs:
         run: |
           TAG=${{ github.ref }}
           docker-compose build
-          docker tag niritz/truegas ${{ secrets.DOCKER_USERNAME }}/truegas/$TAG
+          docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas/$TAG
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas/$TAG
