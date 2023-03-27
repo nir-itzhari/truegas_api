@@ -9,10 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: node:14.16
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: install cli
+        run: apt-get update; apt-get install curl -y
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
