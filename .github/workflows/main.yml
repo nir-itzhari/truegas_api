@@ -27,10 +27,11 @@ jobs:
 
       - name: Build and push Docker image
         # uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        run: docker-compose build
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-       
+        run: |
+          docker-compose build
+          docker tag ${{ secrets.DOCKER_USERNAME }}/truegas ${{ secrets.DOCKER_USERNAME }}/truegas/${{ steps.meta.outputs.tags }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/truegas/${{ steps.meta.outputs.tags }}
+           
+           
+      # tags: ${{ steps.meta.outputs.tags }}
+      # labels: ${{ steps.meta.outputs.labels }}
