@@ -37,4 +37,4 @@ jobs:
         run: |
           docker-compose pull
           docker-compose up -d
-        working-directory: ./docker-compose
+        working-directory: docker-compose
