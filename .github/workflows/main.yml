@@ -30,6 +30,8 @@ jobs:
 
       - name: Docker push image
         run: |
+          TAG=${{ github.ref }}
+          TAG=${TAG#refs/tags/}
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:latest
 
