@@ -3,7 +3,7 @@ services:
   app:
     image: niritz/truegas
     hostname: truegasdocker
-    container_name: truegas-backend
+    container_name: server
     build:
       context: ./
       dockerfile: Dockerfile
@@ -20,7 +20,7 @@ services:
 
   db:
     image: mongo
-    container_name: truegas-database
+    container_name: database
     ports:
       - "8000:27017"
     volumes:
