@@ -8,6 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      service-name-1:
+        image: niritz/truegas
+        ports:
+          - 3001:3000
 
     steps:
       - name: Checkout code
@@ -35,11 +40,6 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:$TAG
           docker push ${{ secrets.DOCKER_USERNAME }}/truegas:latest
 
-    services:
-      service-name-1:
-        image: niritz:truegas
-        ports:
-          - 3001:3000
 # - name: Docker compose up
 #   run: |
 #     docker-compose down
