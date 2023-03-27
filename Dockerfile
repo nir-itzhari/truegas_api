@@ -6,9 +6,7 @@ COPY package*.json ./
 
 RUN npm install -g ts-node
 
-RUN npm install -g npm@9.6.2
-
-# RUN npm install
+RUN npm install
 
 RUN chgrp -R 0 /app && chmod -R g=u /app
 
