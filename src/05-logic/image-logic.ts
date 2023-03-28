@@ -1,6 +1,6 @@
 import { UploadedFile } from 'express-fileupload';
 import { unlinkSync } from 'fs';
-import { Schema, Connection } from 'mongoose';
+import { Schema } from 'mongoose';
 import { v4 as uuid } from 'uuid';
 import { IImageModel, ImageModel } from '../03-models/image-model';
 import path from 'path';
