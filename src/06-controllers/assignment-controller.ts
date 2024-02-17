@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { Schema } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { AssignmentModel } from '../03-models/assignment-model';
 import assignmentsLogic from '../05-logic/assignment-logic';
 import imageLogic from '../05-logic/image-logic';
@@ -33,21 +33,20 @@ router.get('/assignments/:clientId', async (request: Request, response: Response
 
 router.post('/assignments', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const ObjectUserId = new Schema.Types.ObjectId(request.body.user_id)
-        const ObjectClientId = new Schema.Types.ObjectId(request.body.client_id)
-        request.body.user_id = ObjectUserId
-        request.body.client_id = ObjectClientId
-        request.body.imageFile = request.files?.imageFile
-        console.log(request.body)
-        // const assignment = new AssignmentModel(request.body);
-        // const addedAssignments = await assignmentsLogic.addAssignment(assignment);
-        // response.status(201).json(addedAssignments);
-        response.sendStatus(200)
+        const ObjectUserId = new Types.ObjectId(request.body.user_id);
+        const ObjectClientId = new Types.ObjectId(request.body.client_id);
+        request.body.user_id = ObjectUserId;
+        request.body.client_id = ObjectClientId;
+        request.body.imageFile = request.files?.imageFile;
+        // console.log(request.body);
+        const assignment = new AssignmentModel(request.body);
+        const addedAssignments = await assignmentsLogic.addAssignment(assignment);
+        response.status(201).json(addedAssignments);
+        // response.sendStatus(200);
     } catch (err: any) {
         next(err);
     }
-}
-);
+});
 
 
 router.put('/assignments/:_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
