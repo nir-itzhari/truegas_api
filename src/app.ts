@@ -15,6 +15,7 @@ import assignmentController from "./06-controllers/assignment-controller";
 import clientController from "./06-controllers/client-controller";
 import userController from "./06-controllers/user-controller";
 import checkStatusController from "./06-controllers/check-status-controller";
+import imagesController from "./06-controllers/images-controller";
 
 
 const expressServer = express();
@@ -28,6 +29,7 @@ expressServer.use("/api/auth", authController);
 expressServer.use("/api", assignmentController);
 expressServer.use("/api", clientController);
 expressServer.use("/api", userController);
+expressServer.use("/api", imagesController);
 
 expressServer.use("*", (request: Request, response: Response, next: NextFunction) => {
     next(new ErrorModel(404, "Route not found."));
