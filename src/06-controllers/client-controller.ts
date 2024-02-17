@@ -10,6 +10,7 @@ router.get('/clients', async (request: Request, response: Response, next: NextFu
     try {
         const assignments = await clientLogic.getAllClients();
         response.status(200).json(assignments);
+        console.log(assignments)
     } catch (err: any) {
         next(err);
     }
@@ -27,6 +28,15 @@ router.get('/clients/:_id', async (request: Request, response: Response, next: N
     }
 }
 );
+
+router.get('/clients/search/:query', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+    try {
+        const clients = await clientLogic.getClientByQuery({ fullName: request.params.query }); // Using getClientByQuery with the constructed query
+        response.status(200).json(clients);
+    } catch (err: any) {
+        next(err);
+    }
+});
 
 
 router.post('/client', async (request: Request, response: Response, next: NextFunction): Promise<void> => {

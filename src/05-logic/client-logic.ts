@@ -40,6 +40,12 @@ async function getClientById(_id: string): Promise<IClientModel> {
     return client as IClientModel
 }
 
+async function getClientByQuery(query: any): Promise<string[]> {
+    const clients = await ClientModel.find(query).lean().exec();
+    const fullNames: string[] = clients.map((client: any) => client.fullName).filter(Boolean);
+    return fullNames;
+}
+
 
 async function addClient(client: IClientModel): Promise<IClientModel> {
     return client.save()
@@ -62,6 +68,7 @@ async function deleteClient(_id: Schema.Types.ObjectId): Promise<IClientModel> {
 export default {
     getAllClients,
     getClientById,
+    getClientByQuery,
     addClient,
     updateClient,
     deleteClient
