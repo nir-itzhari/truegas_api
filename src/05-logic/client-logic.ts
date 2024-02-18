@@ -40,9 +40,35 @@ async function getClientById(_id: string): Promise<IClientModel> {
     return client as IClientModel
 }
 
-async function getClientByQuery(query: any): Promise<string[]> {
-    const clients = await ClientModel.find(query).lean().exec();
+
+
+async function getClientByQuery(parameters: any): Promise<string[]> {
+    console.log(parameters)
+    const { firstParam } = parameters
+    const { secondParam } = parameters
+    const { thirdParam } = parameters
+    const { forthParam } = parameters
+  
+  
+    let pipeline: any[] = [];
+
+    // Construct pipeline stages based on the provided query parameters
+    if (parameters && firstParam !== "0") {
+        const regexPattern = new RegExp(firstParam, 'i');
+        pipeline.push({ $match: { fullName: regexPattern } });
+    }
+    pipeline.push({ $project: { fullName: 1, _id: 0 } });
+
+    // Add more pipeline stages for additional query parameters if needed in the future
+
+    // Add the final stage to project only the fullName field and exclude the _id field
+
+    // Execute the aggregation pipeline
+    const clients = await ClientModel.aggregate(pipeline);
+
+    // Extract fullNames from the result
     const fullNames: string[] = clients.map((client: any) => client.fullName).filter(Boolean);
+
     return fullNames;
 }
 

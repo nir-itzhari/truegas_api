@@ -29,9 +29,11 @@ router.get('/clients/:_id', async (request: Request, response: Response, next: N
 }
 );
 
-router.get('/clients/search/:query', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/clients/search/:firstParam/:secondParams/:thirdParams/:forthParams', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const clients = await clientLogic.getClientByQuery({ fullName: request.params.query }); // Using getClientByQuery with the constructed query
+        console.log(request.params)
+
+        const clients = await clientLogic.getClientByQuery(request.params); // Using getClientByQuery with the constructed query
         response.status(200).json(clients);
     } catch (err: any) {
         next(err);
