@@ -10,6 +10,7 @@ export interface IClientModel extends Document {
     apartmentNumber: number;
     phoneNumber: number[];
     assignment_id: Schema.Types.ObjectId[];
+    createdAt: string | Date
 }
 
 const ClientSchema = new Schema<IClientModel>(
@@ -62,6 +63,10 @@ const ClientSchema = new Schema<IClientModel>(
         },
         assignment_id: {
             type: [Schema.Types.ObjectId],
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now 
         }
     },
     {

@@ -12,13 +12,15 @@ export interface IAssignmentModel extends Document {
     image_id: Schema.Types.ObjectId[];
     imageFile: UploadedFile[];
     isDone: boolean;
+    createdAt: string | Date;
 }
 
 const AssignmentSchema = new Schema<IAssignmentModel>({
     date: {
         type: Date,
-        set: (value: string): Date => {
-            return validateDateString(value)
+        set: (value: string): string => {
+            const date = new Date(value);
+            return date.toLocaleDateString('en-GB');
         }
     },
     description: {
@@ -42,6 +44,10 @@ const AssignmentSchema = new Schema<IAssignmentModel>({
     },
     isDone: {
         type: Boolean
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 },
     {

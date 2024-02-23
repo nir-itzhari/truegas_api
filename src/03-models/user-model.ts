@@ -5,6 +5,7 @@ export interface IUserModel extends Document {
   password: string;
   assignment_id: Schema.Types.ObjectId[];
   isAdmin: boolean;
+  createdAt: string | Date;
 }
 
 const UserSchema = new Schema<IUserModel>(
@@ -27,6 +28,10 @@ const UserSchema = new Schema<IUserModel>(
       type: [Schema.Types.ObjectId],
     },
     isAdmin: Boolean,
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
   },
   {
     versionKey: false,
