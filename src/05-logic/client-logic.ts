@@ -1,5 +1,5 @@
 import { ClientModel, IClientModel } from './../03-models/client-model';
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 
 
 async function getAllClients(): Promise<IClientModel[]> {
@@ -42,34 +42,51 @@ async function getClientById(_id: string): Promise<IClientModel> {
 
 
 
-async function getClientByQuery(parameters: any): Promise<string[]> {
-    console.log(parameters)
-    const { firstParam } = parameters
-    const { secondParam } = parameters
-    const { thirdParam } = parameters
-    const { forthParam } = parameters
-  
-  
+async function getClientByQuery(parameters: any): Promise<IClientModel[]> {
+    const { fullName, city, street } = parameters;
+
     let pipeline: any[] = [];
 
     // Construct pipeline stages based on the provided query parameters
-    if (parameters && firstParam !== "0") {
-        const regexPattern = new RegExp(firstParam, 'i');
-        pipeline.push({ $match: { fullName: regexPattern } });
+    const conditions: any[] = [];
+
+    if (fullName !== '0' && fullName !== 'הכל') {
+        const fullNameRegex = new RegExp(fullName, 'i');
+        conditions.push({ fullName: fullNameRegex });
     }
-    pipeline.push({ $project: { fullName: 1, _id: 0 } });
 
-    // Add more pipeline stages for additional query parameters if needed in the future
+    if (city !== '0') {
+        const cityRegex = new RegExp(city, 'i');
+        conditions.push({ city: cityRegex });
+    }
 
-    // Add the final stage to project only the fullName field and exclude the _id field
+    if (street !== '0') {
+        const streetRegex = new RegExp(street, 'i');
+        conditions.push({ street: streetRegex });
+    }
 
-    // Execute the aggregation pipeline
+    // Check if fullName is 'הכל', if yes, skip other conditions and return all documents
+    if (fullName === 'הכל') {
+        pipeline.push({ $match: {} });
+    } else {
+        // Check if any conditions were provided
+        if (conditions.length > 0) {
+            // If only one condition, use $match directly
+            if (conditions.length === 1) {
+                pipeline.push({ $match: conditions[0] });
+            } else {
+                pipeline.push({ $match: { $and: conditions } });
+            }
+        } else {
+            // If no parameters provided, return all documents
+            pipeline.push({ $match: {} });
+        }
+    }
+
     const clients = await ClientModel.aggregate(pipeline);
+    console.log(clients);
 
-    // Extract fullNames from the result
-    const fullNames: string[] = clients.map((client: any) => client.fullName).filter(Boolean);
-
-    return fullNames;
+    return clients;
 }
 
 
@@ -80,12 +97,23 @@ async function addClient(client: IClientModel): Promise<IClientModel> {
 
 async function updateClient(clientToUpdate: IClientModel): Promise<IClientModel> {
     const { _id } = clientToUpdate
-    const updatedClient = await ClientModel.findByIdAndUpdate(_id, { $set: clientToUpdate }, { new: true }).exec();
-    return updatedClient;
+    const updatedClient = await ClientModel.findByIdAndUpdate(_id, { $set: clientToUpdate }, { new: true }).populate({
+        path: 'assignment',
+        select: '_id date description image_id',
+        populate: {
+            path: 'image_id',
+            select: 'name'
+        }
+    })
+        .select('-imageFile')
+        .lean()
+        .exec()
+
+    return updatedClient as IClientModel;
 }
 
 
-async function deleteClient(_id: Schema.Types.ObjectId): Promise<IClientModel> {
+async function deleteClient(_id: Types.ObjectId): Promise<IClientModel> {
     const deletedClient = await ClientModel.findByIdAndDelete(_id).exec();
     return deletedClient;
 }
