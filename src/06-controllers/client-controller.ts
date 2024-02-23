@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { ClientModel } from '../03-models/client-model';
 import clientLogic from '../05-logic/client-logic';
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 
 const router = express.Router();
 
@@ -29,9 +29,9 @@ router.get('/clients/:_id', async (request: Request, response: Response, next: N
 }
 );
 
-router.get('/clients/search/:firstParam/:secondParams/:thirdParams/:forthParams', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/clients/search/:fullName/:city/:street', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        console.log(request.params)
+        // console.log(request.params)
 
         const clients = await clientLogic.getClientByQuery(request.params); // Using getClientByQuery with the constructed query
         response.status(200).json(clients);
@@ -41,7 +41,7 @@ router.get('/clients/search/:firstParam/:secondParams/:thirdParams/:forthParams'
 });
 
 
-router.post('/client', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.post('/clients', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const client = new ClientModel(request.body);
         const addedClient = await clientLogic.addClient(client);
@@ -54,10 +54,10 @@ router.post('/client', async (request: Request, response: Response, next: NextFu
 );
 
 
-router.put('/client/:clientId', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.put('/clients/:clientId', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const { clientId } = request.params
-        const clientObjectId = new Schema.Types.ObjectId(clientId)
+        const clientObjectId = new Types.ObjectId(clientId)
         request.body._id = clientObjectId
         const clientDetailsToUpdate = new ClientModel(request.body)
         const updatedClient = await clientLogic.updateClient(clientDetailsToUpdate);
@@ -70,18 +70,17 @@ router.put('/client/:clientId', async (request: Request, response: Response, nex
 );
 
 
-router.delete('/client/:clientId', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.delete('/clients/:clientId', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const { clientId } = request.params
-        const clientObjectId = new Schema.Types.ObjectId(clientId)
+        const { clientId } = request.params;
+        const clientObjectId = new Types.ObjectId(clientId); // Create ObjectId instance
         await clientLogic.deleteClient(clientObjectId);
 
-        response.sendStatus(204)
+        response.sendStatus(204);
     } catch (err: any) {
         next(err);
     }
-}
-);
+});
 
 
 export default router;
