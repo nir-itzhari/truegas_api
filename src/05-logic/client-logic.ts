@@ -47,38 +47,33 @@ async function getClientByQuery(parameters: any): Promise<IClientModel[]> {
 
     let pipeline: any[] = [];
 
-    // Construct pipeline stages based on the provided query parameters
     const conditions: any[] = [];
 
     if (fullName !== '0' && fullName !== 'הכל') {
-        const fullNameRegex = new RegExp(fullName, 'i');
+        const fullNameRegex = new RegExp(`^${fullName}`, 'i');
         conditions.push({ fullName: fullNameRegex });
     }
 
     if (city !== '0') {
-        const cityRegex = new RegExp(city, 'i');
+        const cityRegex = new RegExp(`^${city}`, 'i');
         conditions.push({ city: cityRegex });
     }
 
     if (street !== '0') {
-        const streetRegex = new RegExp(street, 'i');
+        const streetRegex = new RegExp(`^${street}`, 'i');
         conditions.push({ street: streetRegex });
     }
 
-    // Check if fullName is 'הכל', if yes, skip other conditions and return all documents
     if (fullName === 'הכל') {
         pipeline.push({ $match: {} });
     } else {
-        // Check if any conditions were provided
         if (conditions.length > 0) {
-            // If only one condition, use $match directly
             if (conditions.length === 1) {
                 pipeline.push({ $match: conditions[0] });
             } else {
                 pipeline.push({ $match: { $and: conditions } });
             }
         } else {
-            // If no parameters provided, return all documents
             pipeline.push({ $match: {} });
         }
     }
