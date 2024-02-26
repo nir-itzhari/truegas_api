@@ -5,8 +5,9 @@ import authLogic from '../05-logic/auth-logic';
 
 const router = express.Router();
 
-router.post('/register', async (request: Request, response: Response, next: NextFunction) => {
+router.post('/auth/signup', async (request: Request, response: Response, next: NextFunction) => {
   try {
+    console.log(request.body)
     const user = new UserModel(request.body);
     const token = await authLogic.register(user);
 
@@ -18,7 +19,7 @@ router.post('/register', async (request: Request, response: Response, next: Next
 }
 );
 
-router.post('/login', async (request: Request, response: Response, next: NextFunction) => {
+router.post('/auth/signin', async (request: Request, response: Response, next: NextFunction) => {
   try {
     console.log("Login....")
     const credentials = new CredentialsModel(request.body);
