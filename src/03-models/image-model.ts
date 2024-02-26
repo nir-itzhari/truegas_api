@@ -1,11 +1,11 @@
-import { Document, model, Schema } from 'mongoose';
+import mongoose, { Document, model, Schema } from 'mongoose';
 
 
 export interface IImageModel extends Document {
     name: string;
     mimetype: string;
     size: number;
-    assignment_id: Schema.Types.ObjectId[];
+    assignment_id: mongoose.Types.ObjectId[];
 }
 
 export const ImageScheme = new Schema<IImageModel>(
@@ -26,7 +26,7 @@ export const ImageScheme = new Schema<IImageModel>(
             max: 2 * 1024 * 1024,
         },
         assignment_id: {
-            type: [Schema.Types.ObjectId],
+            type: [mongoose.Types.ObjectId],
         }
     },
     {

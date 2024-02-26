@@ -1,7 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { ClientModel } from '../03-models/client-model';
 import clientLogic from '../05-logic/client-logic';
-import { Types } from 'mongoose';
+import { Types, ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -20,9 +21,9 @@ router.get('/clients', async (request: Request, response: Response, next: NextFu
 
 router.get('/clients/:_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const _id = request.params._id
-        const client = await clientLogic.getClientById(_id);
-        response.status(200).json(client);
+        const _id = new mongoose.Types.ObjectId(request.params._id)
+        const clients = await clientLogic.getClientById(_id);
+        response.status(200).json(clients);
     } catch (err: any) {
         next(err);
     }
@@ -73,8 +74,8 @@ router.put('/clients/:clientId', async (request: Request, response: Response, ne
 router.delete('/clients/:clientId', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const { clientId } = request.params;
-        const clientObjectId = new Types.ObjectId(clientId); // Create ObjectId instance
-        await clientLogic.deleteClient(clientObjectId);
+        // const clientObjectId = new Types.ObjectId(clientId); // Create ObjectId instance
+        await clientLogic.deleteClient(clientId);
 
         response.sendStatus(204);
     } catch (err: any) {

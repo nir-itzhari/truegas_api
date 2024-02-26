@@ -1,15 +1,17 @@
-import { Document, model, Schema } from 'mongoose';
+import mongoose, { Document, model, Schema } from 'mongoose';
 import { UploadedFile } from 'express-fileupload';
 import { ImageModel } from './image-model';
 import { validateDateString } from '../01-utils/validations';
 
 
+
 export interface IAssignmentModel extends Document {
     date: Date;
+    title: string;
     description: string;
-    user_id: Schema.Types.ObjectId;
+    user_id: mongoose.Types.ObjectId;
     client_id: Schema.Types.ObjectId;
-    image_id: Schema.Types.ObjectId[];
+    image_id: mongoose.Types.ObjectId[];
     imageFile: UploadedFile[];
     isDone: boolean;
     createdAt: string | Date;
@@ -29,6 +31,12 @@ const AssignmentSchema = new Schema<IAssignmentModel>({
         maxlength: [10000, 'Too long.'],
         trim: true
     },
+    title: {
+        type: String,
+        minlength: [2, 'Too short.'],
+        maxlength: [10000, 'Too long.'],
+        trim: true
+    },
     client_id: {
         type: Schema.Types.ObjectId,
     },
@@ -36,7 +44,7 @@ const AssignmentSchema = new Schema<IAssignmentModel>({
         type: Schema.Types.ObjectId,
     },
     image_id: {
-        type: [Schema.Types.ObjectId],
+        type: [mongoose.Types.ObjectId],
         ref: ImageModel
     },
     imageFile: {
@@ -45,12 +53,10 @@ const AssignmentSchema = new Schema<IAssignmentModel>({
     isDone: {
         type: Boolean
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+
 },
     {
+        timestamps: true,
         versionKey: false,
         toJSON: { virtuals: true },
         id: false,

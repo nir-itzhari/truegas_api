@@ -1,5 +1,7 @@
-import { Document, model, Schema } from 'mongoose';
+import mongoose, { Document, model, Schema, Types } from 'mongoose';
 import { AssignmentModel } from './assignment-model';
+
+
 
 export interface IClientModel extends Document {
     fullName: string;
@@ -10,7 +12,7 @@ export interface IClientModel extends Document {
     apartmentNumber: number;
     phoneNumber: number[];
     assignment_id: Schema.Types.ObjectId[];
-    createdAt: string | Date
+    user_id: mongoose.Types.ObjectId[];
 }
 
 const ClientSchema = new Schema<IClientModel>(
@@ -62,14 +64,11 @@ const ClientSchema = new Schema<IClientModel>(
             max: [10, 'Phone Number cannot be more then 8 digits.'],
         },
         assignment_id: {
-            type: [Schema.Types.ObjectId],
+            type: [mongoose.Types.ObjectId],
         },
-        createdAt: {
-            type: Date,
-            default: Date.now 
-        }
     },
     {
+        timestamps: true,
         versionKey: false,
         toJSON: { virtuals: true },
         id: false,

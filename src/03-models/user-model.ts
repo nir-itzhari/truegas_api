@@ -1,20 +1,19 @@
 import { Document, model, Schema } from 'mongoose';
 
+
 export interface IUserModel extends Document {
-  user_id: number;
+  email: string;
   password: string;
-  assignment_id: Schema.Types.ObjectId[];
+  clients_id?: Schema.Types.ObjectId[];
   isAdmin: boolean;
-  createdAt: string | Date;
+  createdAt?: string | Date;
 }
 
 const UserSchema = new Schema<IUserModel>(
   {
-    user_id: {
-      type: Number,
-      required: [true, 'Missing User Id'],
-      minlength: [7, 'Id Too Short.'],
-      maxlength: [14, 'Id Too long.'],
+    email: {
+      type: String,
+      required: [true, 'נא להזין אימייל'],
       unique: true,
     },
     password: {
@@ -24,16 +23,12 @@ const UserSchema = new Schema<IUserModel>(
       maxlength: [150, 'Password Too long.'],
       trim: true,
     },
-    assignment_id: {
+    clients_id: {
       type: [Schema.Types.ObjectId],
     },
-    isAdmin: Boolean,
-    createdAt: {
-      type: Date,
-      default: Date.now
-    }
   },
   {
+    timestamps: true,
     versionKey: false,
     toJSON: { virtuals: true },
     id: false,
