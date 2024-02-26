@@ -19,13 +19,15 @@ import imagesController from "./06-controllers/images-controller";
 
 
 const expressServer = express();
+
+if (config.isDevelopment) {
+    expressServer.use(cors());
+}
+
 expressServer.use(express.json());
-
-if (config.isDevelopment) expressServer.use(cors());
 expressServer.use(fileUpload());
-
 expressServer.use("/api", checkStatusController);
-expressServer.use("/api/auth", authController);
+expressServer.use("/api", authController);
 expressServer.use("/api", assignmentController);
 expressServer.use("/api", clientController);
 expressServer.use("/api", userController);
