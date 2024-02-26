@@ -1,5 +1,6 @@
+import { AssignmentModel } from '../03-models/assignment-model';
 import { ClientModel, IClientModel } from './../03-models/client-model';
-import { Types } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 
 async function getAllClients(): Promise<IClientModel[]> {
@@ -8,7 +9,7 @@ async function getAllClients(): Promise<IClientModel[]> {
             path: 'assignment',
             select: '_id date description', populate: { path: 'image_id', select: 'name' }
         })
-        .select('-imageFile')
+        .select('-imageFile -createdAt')
         .lean()
         .exec()
 
@@ -25,19 +26,51 @@ async function getAllClients(): Promise<IClientModel[]> {
 }
 
 
-async function getClientById(_id: string): Promise<IClientModel> {
-    const client = await ClientModel.findById(_id).populate({
-        path: 'assignment',
-        select: '_id date description image_id',
-        populate: {
-            path: 'image_id',
-            select: 'name'
+async function getClientById(_id: mongoose.Types.ObjectId): Promise<IClientModel[]> {
+
+    const pipeline = [
+        {
+            $match: {
+                user_id: _id,
+            },
+        },
+        {
+            $lookup: {
+                from: 'assignment',
+                localField: 'user_id',
+                foreignField: 'user_id',
+                as: 'assignments',
+            },
+        },
+        {
+            $lookup: {
+                from: 'images',
+                localField: 'image_id',
+                foreignField: 'image_id',
+                as: 'images',
+            },
+        },
+
+        {
+            $project: {
+                _id: 1,
+                fullName: 1,
+                city: 1,
+                street: 1,
+                buildingNumber: 1,
+                apartmentNumber: 1,
+                floor: 1,
+                phoneNumber: 1,
+                assignments: { date: 1, description: 1, title: 1, isDone: 1 },
+                images: { _id: 1, name: 1 },
+            }
         }
-    })
-        .select('-imageFile')
-        .lean()
-        .exec()
-    return client as IClientModel
+    ]
+
+
+    const clients = await ClientModel.aggregate(pipeline);
+
+    return clients
 }
 
 
@@ -77,6 +110,7 @@ async function getClientByQuery(parameters: any): Promise<IClientModel[]> {
             pipeline.push({ $match: {} });
         }
     }
+    pipeline.push({ $project: { createdAt: 0 } });
 
     const clients = await ClientModel.aggregate(pipeline);
     console.log(clients);
@@ -108,8 +142,8 @@ async function updateClient(clientToUpdate: IClientModel): Promise<IClientModel>
 }
 
 
-async function deleteClient(_id: Types.ObjectId): Promise<IClientModel> {
-    const deletedClient = await ClientModel.findByIdAndDelete(_id).exec();
+async function deleteClient(_id: string): Promise<IClientModel> {
+    const deletedClient = await ClientModel.findByIdAndDelete(new mongoose.Types.ObjectId(_id)).exec();
     return deletedClient;
 }
 
