@@ -6,16 +6,16 @@ import path from 'path';
 import ErrorModel from '../03-models/error-model';
 import imageLogic from './image-logic';
 import { ClientModel } from '../03-models/client-model';
-import { ObjectId, Schema } from 'mongoose';
+import mongoose, { ObjectId, Schema } from 'mongoose';
 import { UserModel } from '../03-models/user-model';
 
 
 // Get all assignments without the image data
 async function getAllAssignments(): Promise<IAssignmentModel[]> {
     const assignments = await AssignmentModel.find().select("-imageFile -image")
-        .populate({ path: 'user', select: '-_id user_id' })
+        .populate({ path: 'user', select: '-_id email' })
         .populate({ path: 'client', select: '-_id -assignment_id' })
-        .populate({ path: 'image', select: '-_id name' }).lean().exec();
+        .populate({ path: 'image', select: '-_id name' }).select('-createdAt').lean().exec();
     return assignments as IAssignmentModel[];
 }
 
@@ -33,7 +33,7 @@ async function addAssignment(assignment: IAssignmentModel): Promise<IAssignmentM
 
 
         if (assignment.imageFile && assignment.imageFile.length) {
-            const image_id: ObjectId[] = [];
+            const image_id: mongoose.Types.ObjectId[] = [];
             for (const imageExt of assignment.imageFile) {
                 const extension = imageExt.name.substring(imageExt.name.lastIndexOf('.'));
                 const imageName = `${uuid()}${extension}`;
@@ -71,7 +71,7 @@ async function addAssignment(assignment: IAssignmentModel): Promise<IAssignmentM
 
 
 // Function to update an assignment - dynamic
-async function updateAssignment(assignment_id: Schema.Types.ObjectId, assignment: IAssignmentModel): Promise<IAssignmentModel> {
+async function updateAssignment(assignment_id: mongoose.Types.ObjectId, assignment: IAssignmentModel): Promise<IAssignmentModel> {
     try {
         await assignment.validate();
 
@@ -81,7 +81,7 @@ async function updateAssignment(assignment_id: Schema.Types.ObjectId, assignment
             throw new ErrorModel(404, `המשימה שברצונך לערוך לא נמצאה`);
         }
 
-        let updatedImageIds: ObjectId[] = oldAssignment.image_id;
+        let updatedImageIds: mongoose.Types.ObjectId[] = oldAssignment.image_id;
         if (assignment.image_id && assignment.image_id.length) {
             updatedImageIds = [...oldAssignment.image_id];
 

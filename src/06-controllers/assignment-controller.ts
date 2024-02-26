@@ -1,8 +1,9 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { Schema, Types } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import { AssignmentModel } from '../03-models/assignment-model';
 import assignmentsLogic from '../05-logic/assignment-logic';
 import imageLogic from '../05-logic/image-logic';
+import verifyLoggedIn from '../02-middleware/verify-logged-in';
 
 const router = express.Router();
 
@@ -52,7 +53,7 @@ router.post('/assignments', async (request: Request, response: Response, next: N
 router.put('/assignments/:_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const { _id } = request.params
-        const assignment_id = new Schema.Types.ObjectId(_id)
+        const assignment_id = new mongoose.Types.ObjectId(_id)
         request.body.imageFile = request.files?.imageFile
         const assignment = new AssignmentModel(request.body);
         const updatedAssignments = await assignmentsLogic.updateAssignment(assignment_id, assignment);
@@ -67,7 +68,7 @@ router.put('/assignments/:_id', async (request: Request, response: Response, nex
 
 router.delete('/assignments/:image_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const _id = new Schema.Types.ObjectId(request.params.image_id)
+        const _id = new mongoose.Types.ObjectId(request.params.image_id)
         await imageLogic.deleteImage(_id)
 
         response.sendStatus(204)

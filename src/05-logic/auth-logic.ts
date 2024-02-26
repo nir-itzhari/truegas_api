@@ -3,8 +3,8 @@ import { IUserModel, UserModel } from '../03-models/user-model';
 import ErrorModel from '../03-models/error-model';
 import cyber from '../01-utils/cyber';
 
-async function isUserIdFree(user_id: number): Promise<boolean> {
-  const count = await UserModel.countDocuments({ user_id: user_id }).exec();
+async function isUserIdFree(email: string): Promise<boolean> {
+  const count = await UserModel.countDocuments({ email: email }).exec();
 
   return count === 0;
 }
@@ -17,9 +17,9 @@ async function register(user: IUserModel): Promise<string> {
     throw new ErrorModel(400, error.message);
   }
 
-  const existingUser = await isUserIdFree(user.user_id);
+  const existingUser = await isUserIdFree(user.email);
   if (!existingUser) {
-    throw new ErrorModel(400, `שם משתמש ${user.user_id} תפוס`)
+    throw new ErrorModel(400, `שם משתמש ${user.email} תפוס`)
   }
 
 
@@ -45,7 +45,7 @@ async function login(credentials: ICredentialsModel): Promise<string> {
   credentials.password = cyber.hash(credentials.password);
 
   const users = await UserModel.find({
-    user_id: credentials.user_id,
+    email: credentials.email,
     password: credentials.password,
   }).exec();
 

@@ -1,6 +1,6 @@
 import { UploadedFile } from 'express-fileupload';
 import { unlinkSync } from 'fs';
-import { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { v4 as uuid } from 'uuid';
 import { IImageModel, ImageModel } from '../03-models/image-model';
 import path from 'path';
@@ -9,7 +9,7 @@ import { AssignmentModel } from '../03-models/assignment-model';
 
 
 
-async function updateImage(oldImageId: Schema.Types.ObjectId, newImage: UploadedFile): Promise<IImageModel> {
+async function updateImage(oldImageId: mongoose.Types.ObjectId, newImage: UploadedFile): Promise<IImageModel> {
     const oldImage = await ImageModel.findById(oldImageId).exec();
     if (!oldImage) {
         throw new ErrorModel(404, `Image with _id ${oldImageId} not found`);
@@ -32,7 +32,7 @@ async function updateImage(oldImageId: Schema.Types.ObjectId, newImage: Uploaded
 }
 
 
-async function deleteImage(imageId: Schema.Types.ObjectId): Promise<void> {
+async function deleteImage(imageId: mongoose.Types.ObjectId): Promise<void> {
     try {
         const imageToDelete = await ImageModel.findById(imageId).exec();
         if (!imageToDelete) {
