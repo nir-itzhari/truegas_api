@@ -19,10 +19,10 @@ router.get('/assignments', async (request: Request, response: Response, next: Ne
 );
 
 
-router.get('/assignments/:clientId', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/assignments/:user_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const clientId = request.params.clientId;
-        const assignmentsByClientId = await assignmentsLogic.getAssignmentsByClientId(clientId);
+        const ObjectUserId = new mongoose.Types.ObjectId(request.params.user_id);
+        const assignmentsByClientId = await assignmentsLogic.getAssignmentsByUserId(ObjectUserId);
 
         response.json(assignmentsByClientId);
     } catch (err: any) {
@@ -39,9 +39,9 @@ router.post('/assignments', async (request: Request, response: Response, next: N
         request.body.user_id = ObjectUserId;
         request.body.client_id = ObjectClientId;
         request.body.imageFile = request.files?.imageFile;
-        // console.log(request.body);
         const assignment = new AssignmentModel(request.body);
         const addedAssignments = await assignmentsLogic.addAssignment(assignment);
+        // console.log(addedAssignments)
         response.status(201).json(addedAssignments);
         // response.sendStatus(200);
     } catch (err: any) {

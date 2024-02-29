@@ -6,7 +6,7 @@ import { validateDateString } from '../01-utils/validations';
 
 
 export interface IAssignmentModel extends Document {
-    date: Date;
+    date: string;
     title: string;
     description: string;
     user_id: mongoose.Types.ObjectId;
@@ -14,16 +14,13 @@ export interface IAssignmentModel extends Document {
     image_id: mongoose.Types.ObjectId[];
     imageFile: UploadedFile[];
     isDone: boolean;
-    createdAt: string | Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const AssignmentSchema = new Schema<IAssignmentModel>({
     date: {
-        type: Date,
-        set: (value: string): string => {
-            const date = new Date(value);
-            return date.toLocaleDateString('en-GB');
-        }
+        type: String,
     },
     description: {
         type: String,
@@ -53,6 +50,9 @@ const AssignmentSchema = new Schema<IAssignmentModel>({
     isDone: {
         type: Boolean
     },
+    createdAt: Date
+    ,
+    updatedAt: Date
 
 },
     {
@@ -61,6 +61,13 @@ const AssignmentSchema = new Schema<IAssignmentModel>({
         toJSON: { virtuals: true },
         id: false,
     });
+
+AssignmentSchema.pre('save', function (next) {
+    const now = new Date();
+    this.createdAt = new Date(now.getTime() + (2 * 60 * 60 * 1000));
+    this.updatedAt = new Date(now.getTime() + (2 * 60 * 60 * 1000));
+    next();
+});
 
 
 const virtuals = ['client', 'user', 'image'];
