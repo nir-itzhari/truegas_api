@@ -3,6 +3,7 @@ import { ClientModel } from '../03-models/client-model';
 import clientLogic from '../05-logic/client-logic';
 import { Types, ObjectId } from 'mongoose';
 import mongoose from 'mongoose';
+import cyber from '../01-utils/cyber';
 
 const router = express.Router();
 
@@ -32,9 +33,10 @@ router.get('/clients/:_id', async (request: Request, response: Response, next: N
 
 router.get('/clients/search/:fullName/:city/:street', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        // console.log(request.params)
-
-        const clients = await clientLogic.getClientByQuery(request.params); // Using getClientByQuery with the constructed query
+        const authorizationHeader = request.header("authorization");
+        const user = cyber.getUserFromToken(authorizationHeader)
+        const _id = new mongoose.Types.ObjectId(user._id)
+        const clients = await clientLogic.getClientByQuery(request.params, _id); // Using getClientByQuery with the constructed query
         response.status(200).json(clients);
     } catch (err: any) {
         next(err);

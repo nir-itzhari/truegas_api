@@ -75,12 +75,10 @@ async function getClientById(_id: mongoose.Types.ObjectId): Promise<IClientModel
 
 
 
-async function getClientByQuery(parameters: any): Promise<IClientModel[]> {
+async function getClientByQuery(parameters: any, _id: mongoose.Types.ObjectId): Promise<IClientModel[]> {
     const { fullName, city, street } = parameters;
 
-    let pipeline: any[] = [];
-
-    const conditions: any[] = [];
+    const conditions: any[] = [{ user_id: _id }];
 
     if (fullName !== '0' && fullName !== 'הכל') {
         const fullNameRegex = new RegExp(`^${fullName}`, 'i');
@@ -97,26 +95,14 @@ async function getClientByQuery(parameters: any): Promise<IClientModel[]> {
         conditions.push({ street: streetRegex });
     }
 
-    if (fullName === 'הכל') {
-        pipeline.push({ $match: {} });
-    } else {
-        if (conditions.length > 0) {
-            if (conditions.length === 1) {
-                pipeline.push({ $match: conditions[0] });
-            } else {
-                pipeline.push({ $match: { $and: conditions } });
-            }
-        } else {
-            pipeline.push({ $match: {} });
-        }
-    }
-    pipeline.push({ $project: { createdAt: 0 } });
+    const pipeline: any[] = [{ $match: { $and: conditions } }, { $project: { createdAt: 0 } }];
 
     const clients = await ClientModel.aggregate(pipeline);
     console.log(clients);
 
     return clients;
 }
+
 
 
 async function addClient(client: IClientModel): Promise<IClientModel> {
