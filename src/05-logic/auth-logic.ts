@@ -61,7 +61,57 @@ async function login(credentials: ICredentialsModel): Promise<string> {
 }
 
 
+
+async function saveResetToken(email: string): Promise<string> {
+  // Find user by email
+  const user = await UserModel.findOne({ email });
+
+  if (!user) {
+    throw new ErrorModel(404, 'User not found');
+  }
+
+  // Generate reset token
+  const resetToken = cyber.hash(email)
+
+  // Update user with reset token
+  user.resetToken = resetToken;
+  await user.save()
+
+  return resetToken
+}
+
+
+async function checkUserResetToken(token: string): Promise<boolean> {
+  const user = await UserModel.findOne({ resetToken: token });
+
+  if (!user) {
+    throw new ErrorModel(404, 'Invalid or expired token');
+  }
+
+  return true
+}
+
+
+
+async function resetPassword(newPassword: string, token: string): Promise<void> {
+
+
+  const user = await UserModel.findOne({ resetToken: token });
+
+  if (!user) {
+    throw new ErrorModel(404, 'Invalid or expired token');
+  }
+  user.password = cyber.hash(newPassword);
+  user.resetToken = undefined;
+  await user.save();
+
+}
+
+
 export default {
   register,
   login,
+  resetPassword,
+  checkUserResetToken,
+  saveResetToken
 };

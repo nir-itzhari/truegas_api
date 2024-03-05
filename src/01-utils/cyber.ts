@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { IUserModel } from '../03-models/user-model';
 import crypto from 'crypto';
+import ErrorModel from '../03-models/error-model';
 
 const salt = 'MakeThingsGoRight'; // Hash salt.
 const secretKey = 'AbraKadabraHokusFokus';
@@ -61,9 +62,27 @@ function getUserFromToken(autorizationHeader: string): IUserModel {
   return user;
 }
 
+
+function decodeResetToken(hashedResetToken: string): string {
+  try {
+    const payload: any = jwt.decode(hashedResetToken);
+
+    const resetToken: string = payload?.resetToken;
+
+    if (!resetToken) {
+      throw new ErrorModel(404, 'Reset token not found');
+    }
+
+    return resetToken;
+  } catch (error) {
+    throw new ErrorModel(404, 'Invalid reset token');
+  }
+}
+
 export default {
   hash,
   getNewToken,
   verifyToken,
   getUserFromToken,
+  decodeResetToken
 };

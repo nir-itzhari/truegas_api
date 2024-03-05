@@ -5,8 +5,8 @@ export interface IUserModel extends Document {
   email: string;
   password: string;
   clients_id?: Schema.Types.ObjectId[];
-  isAdmin: boolean;
-  createdAt?: string | Date;
+  resetToken: string;
+  createdAt: string | Date;
 }
 
 const UserSchema = new Schema<IUserModel>(
@@ -25,6 +25,9 @@ const UserSchema = new Schema<IUserModel>(
     },
     clients_id: {
       type: [Schema.Types.ObjectId],
+    },
+    resetToken: {
+      type: String
     },
   },
   {
