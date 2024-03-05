@@ -31,11 +31,9 @@ router.get('/clients/:_id', async (request: Request, response: Response, next: N
 }
 );
 
-router.get('/clients/search/:fullName/:city/:street', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/clients/search/:_id/:fullName/:city/:street', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const authorizationHeader = request.header("authorization");
-        const user = cyber.getUserFromToken(authorizationHeader)
-        const _id = new mongoose.Types.ObjectId(user._id)
+        const _id = new mongoose.Types.ObjectId(request.params._id)
         const clients = await clientLogic.getClientByQuery(request.params, _id); // Using getClientByQuery with the constructed query
         response.status(200).json(clients);
     } catch (err: any) {
