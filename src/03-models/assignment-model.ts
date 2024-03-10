@@ -6,7 +6,7 @@ import { validateDateString } from '../01-utils/validations';
 
 
 export interface IAssignmentModel extends Document {
-    date: string;
+    date: Date;
     title: string;
     description: string;
     user_id: mongoose.Types.ObjectId;
@@ -14,13 +14,14 @@ export interface IAssignmentModel extends Document {
     image_id: mongoose.Types.ObjectId[];
     imageFile: UploadedFile[];
     isDone: boolean;
+    price: number;
     createdAt: Date;
     updatedAt: Date;
 }
 
 const AssignmentSchema = new Schema<IAssignmentModel>({
     date: {
-        type: String,
+        type: Date,
     },
     description: {
         type: String,
@@ -49,6 +50,9 @@ const AssignmentSchema = new Schema<IAssignmentModel>({
     },
     isDone: {
         type: Boolean
+    },
+    price: {
+        type: Number
     },
     createdAt: Date
     ,
