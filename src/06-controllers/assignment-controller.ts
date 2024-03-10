@@ -78,5 +78,15 @@ router.delete('/assignments/:image_id', async (request: Request, response: Respo
 }
 );
 
+router.get('/assignments/chart/:_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+    try {
+        const _id = new mongoose.Types.ObjectId(request.params._id)
+        const monthlyAverageIncome = await assignmentsLogic.getMonthlyAverageIncome(_id)
+        response.json(monthlyAverageIncome)
+    } catch (err) {
+        next(err);
+    }
+}
+);
 
 export default router;

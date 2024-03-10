@@ -203,11 +203,51 @@ async function filterAssignments(filters: IFilterModel): Promise<IAssignmentMode
 
 }
 
+async function getMonthlyAverageIncome(_id: mongoose.Types.ObjectId) {
+    const today = new Date();
+    const result = [];
+
+    for (let i = 0; i < 12; i++) {
+        const startDate = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        const endDate = new Date(today.getFullYear(), today.getMonth() - i + 1, 0);
+
+        const monthName = startDate.toLocaleString('en-US', { month: '2-digit', year: '2-digit' });
+
+            const aggregationPipeline = [
+                {
+                    $match: {
+                        user_id: _id,
+                        date: {
+                            $gte: startDate,
+                            $lte: endDate
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalIncome: { $sum: "$price" }
+                    }
+                },
+            ];
+
+            const resultOfMonth = await AssignmentModel.aggregate(aggregationPipeline);
+            result.push({ month: monthName, totalIncome: resultOfMonth.length ? resultOfMonth[0].totalIncome : 0 });
+   
+    }
+
+    return result;
+}
+
+
+
+
 export default {
     getAllAssignments,
     getAssignmentsByUserId,
     addAssignment,
     updateAssignment,
     deleteAssignment,
-    filterAssignments
+    filterAssignments,
+    getMonthlyAverageIncome
 }
