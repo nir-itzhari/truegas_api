@@ -8,18 +8,17 @@ import verifyLoggedIn from '../02-middleware/verify-logged-in';
 const router = express.Router();
 
 
-router.get('/assignments', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/assignments', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const assignments = await assignmentsLogic.getAllAssignments();
         response.json(assignments);
     } catch (err: any) {
         next(err);
     }
-}
-);
+});
 
 
-router.get('/assignments/:user_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/assignments/:user_id', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const ObjectUserId = new mongoose.Types.ObjectId(request.params.user_id);
         const assignmentsByClientId = await assignmentsLogic.getAssignmentsByUserId(ObjectUserId);
@@ -32,7 +31,7 @@ router.get('/assignments/:user_id', async (request: Request, response: Response,
 );
 
 
-router.post('/assignments', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.post('/assignments', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const ObjectUserId = new Types.ObjectId(request.body.user_id);
         const ObjectClientId = new Types.ObjectId(request.body.client_id);
@@ -41,16 +40,14 @@ router.post('/assignments', async (request: Request, response: Response, next: N
         request.body.imageFile = request.files?.imageFile;
         const assignment = new AssignmentModel(request.body);
         const addedAssignments = await assignmentsLogic.addAssignment(assignment);
-        // console.log(addedAssignments)
         response.status(201).json(addedAssignments);
-        // response.sendStatus(200);
     } catch (err: any) {
         next(err);
     }
 });
 
 
-router.put('/assignments/:_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.put('/assignments/:_id', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const { _id } = request.params
         const assignment_id = new mongoose.Types.ObjectId(_id)
@@ -66,7 +63,7 @@ router.put('/assignments/:_id', async (request: Request, response: Response, nex
 );
 
 
-router.delete('/assignments/:image_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.delete('/assignments/:image_id', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const _id = new mongoose.Types.ObjectId(request.params.image_id)
         await imageLogic.deleteImage(_id)
@@ -78,7 +75,7 @@ router.delete('/assignments/:image_id', async (request: Request, response: Respo
 }
 );
 
-router.get('/assignments/chart/:_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/assignments/chart/:_id', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const _id = new mongoose.Types.ObjectId(request.params._id)
         const monthlyAverageIncome = await assignmentsLogic.getMonthlyAverageIncome(_id)

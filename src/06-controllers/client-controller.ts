@@ -4,11 +4,12 @@ import clientLogic from '../05-logic/client-logic';
 import { Types, ObjectId } from 'mongoose';
 import mongoose from 'mongoose';
 import cyber from '../01-utils/cyber';
+import verifyLoggedIn from '../02-middleware/verify-logged-in';
 
 const router = express.Router();
 
 
-router.get('/clients', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/clients', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const assignments = await clientLogic.getAllClients();
         response.status(200).json(assignments);
@@ -20,7 +21,7 @@ router.get('/clients', async (request: Request, response: Response, next: NextFu
 );
 
 
-router.get('/clients/:_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/clients/:_id', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const _id = new mongoose.Types.ObjectId(request.params._id)
         const clients = await clientLogic.getClientById(_id);
@@ -31,7 +32,7 @@ router.get('/clients/:_id', async (request: Request, response: Response, next: N
 }
 );
 
-router.get('/clients/search/:_id/:fullName/:city/:street', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/clients/search/:_id/:fullName/:city/:street', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const _id = new mongoose.Types.ObjectId(request.params._id)
         const clients = await clientLogic.getClientByQuery(request.params, _id); // Using getClientByQuery with the constructed query
@@ -42,7 +43,7 @@ router.get('/clients/search/:_id/:fullName/:city/:street', async (request: Reque
 });
 
 
-router.post('/clients', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.post('/clients', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const client = new ClientModel(request.body);
         const addedClient = await clientLogic.addClient(client);
@@ -55,7 +56,7 @@ router.post('/clients', async (request: Request, response: Response, next: NextF
 );
 
 
-router.put('/clients/:clientId', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.put('/clients/:clientId', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const { clientId } = request.params
         const clientObjectId = new Types.ObjectId(clientId)
@@ -71,7 +72,7 @@ router.put('/clients/:clientId', async (request: Request, response: Response, ne
 );
 
 
-router.delete('/clients/:clientId', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.delete('/clients/:clientId', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const { clientId } = request.params;
         // const clientObjectId = new Types.ObjectId(clientId); // Create ObjectId instance
