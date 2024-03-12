@@ -9,6 +9,7 @@ import { ClientModel } from '../03-models/client-model';
 import mongoose, { Schema } from 'mongoose';
 import { UserModel } from '../03-models/user-model';
 import { UploadedFile } from 'express-fileupload';
+import dayjs from 'dayjs';
 
 
 async function getAllAssignments(): Promise<IAssignmentModel[]> {
@@ -205,39 +206,38 @@ async function filterAssignments(filters: IFilterModel): Promise<IAssignmentMode
 
 async function getMonthlyAverageIncome(_id: mongoose.Types.ObjectId) {
     const today = new Date();
-    const result = [];
+    const months = Array.from({ length: 12 }, (v, i) => i); 
+    const result = await Promise.all(months.map(async (month) => {
+        const startDate = new Date(today.getFullYear(), today.getMonth() - month, 1);
+        const endDate = new Date(today.getFullYear(), today.getMonth() - month + 1, 0);
 
-    for (let i = 0; i < 12; i++) {
-        const startDate = new Date(today.getFullYear(), today.getMonth() - i, 1);
-        const endDate = new Date(today.getFullYear(), today.getMonth() - i + 1, 0);
+        const monthName = dayjs(startDate).format('MM-YY');
 
-        const monthName = startDate.toLocaleString('en-US', { month: '2-digit', year: '2-digit' });
-
-            const aggregationPipeline = [
-                {
-                    $match: {
-                        user_id: _id,
-                        date: {
-                            $gte: startDate,
-                            $lte: endDate
-                        }
+        const aggregationPipeline = [
+            {
+                $match: {
+                    user_id: _id,
+                    date: {
+                        $gte: startDate,
+                        $lte: endDate
                     }
-                },
-                {
-                    $group: {
-                        _id: null,
-                        totalIncome: { $sum: "$price" }
-                    }
-                },
-            ];
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalIncome: { $sum: "$price" }
+                }
+            },
+        ];
 
-            const resultOfMonth = await AssignmentModel.aggregate(aggregationPipeline);
-            result.push({ month: monthName, totalIncome: resultOfMonth.length ? resultOfMonth[0].totalIncome : 0 });
-   
-    }
+        const resultOfMonth = await AssignmentModel.aggregate(aggregationPipeline);
+        return { month: monthName, totalIncome: resultOfMonth.length ? resultOfMonth[0].totalIncome : 0 };
+    }));
 
     return result;
 }
+
 
 
 
