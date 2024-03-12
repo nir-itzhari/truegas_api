@@ -7,9 +7,6 @@ import { IContactUsModel } from "../03-models/contact-us-model";
 let isConnected = false;
 
 
-export async function connectToDatabase() {
-}
-
 const connect = async (): Promise<void> => {
     if (isConnected) {
         console.log('Already connected to MongoDB');
@@ -37,9 +34,9 @@ export async function closeDatabaseConnection() {
         await mongoose.disconnect();
         isConnected = false;
         console.log('Disconnected from MongoDB');
-    } catch (error) {
-        console.error('Error disconnecting from MongoDB:', error);
-        throw error;
+    } catch (error: any) {
+        console.error('Error disconnecting from MongoDB:', error.message);
+        throw new ErrorModel(400, error.message);
     }
 }
 
