@@ -13,7 +13,6 @@ router.get('/clients', verifyLoggedIn, async (request: Request, response: Respon
     try {
         const assignments = await clientLogic.getAllClients();
         response.status(200).json(assignments);
-        console.log(assignments)
     } catch (err: any) {
         next(err);
     }
@@ -35,7 +34,7 @@ router.get('/clients/:_id', verifyLoggedIn, async (request: Request, response: R
 router.get('/clients/search/:_id/:fullName/:city/:street', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const _id = new mongoose.Types.ObjectId(request.params._id)
-        const clients = await clientLogic.getClientByQuery(request.params, _id); // Using getClientByQuery with the constructed query
+        const clients = await clientLogic.getClientByQuery(request.params, _id);
         response.status(200).json(clients);
     } catch (err: any) {
         next(err);

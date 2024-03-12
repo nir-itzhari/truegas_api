@@ -98,7 +98,6 @@ async function getClientByQuery(parameters: any, _id: mongoose.Types.ObjectId): 
     const pipeline: any[] = [{ $match: { $and: conditions } }, { $project: { createdAt: 0 } }];
 
     const clients = await ClientModel.aggregate(pipeline);
-    console.log(clients);
 
     return clients;
 }

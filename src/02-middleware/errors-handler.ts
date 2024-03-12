@@ -5,8 +5,6 @@ function errorsHandler(err: any, request: Request, response: Response, next: Nex
 
     const status = err.status || 500;
 
-    console.log(err);
-
     let msg;
     if (config.isDevelopment) {
         msg = err.message;
