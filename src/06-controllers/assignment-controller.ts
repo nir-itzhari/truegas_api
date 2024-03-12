@@ -86,4 +86,15 @@ router.get('/assignments/chart/:_id', verifyLoggedIn, async (request: Request, r
 }
 );
 
+router.get('/assignments/count-card/:_id', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+    try {
+        const _id = new mongoose.Types.ObjectId(request.params._id)
+        const weeklyAssignments = await assignmentsLogic.getWeeklyAssignments(_id)
+        response.json(weeklyAssignments)
+    } catch (err) {
+        next(err);
+    }
+}
+);
+
 export default router;

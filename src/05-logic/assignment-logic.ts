@@ -206,7 +206,7 @@ async function filterAssignments(filters: IFilterModel): Promise<IAssignmentMode
 
 async function getMonthlyAverageIncome(_id: mongoose.Types.ObjectId) {
     const today = new Date();
-    const months = Array.from({ length: 12 }, (v, i) => i); 
+    const months = Array.from({ length: 12 }, (v, i) => i);
     const result = await Promise.all(months.map(async (month) => {
         const startDate = new Date(today.getFullYear(), today.getMonth() - month, 1);
         const endDate = new Date(today.getFullYear(), today.getMonth() - month + 1, 0);
@@ -239,6 +239,53 @@ async function getMonthlyAverageIncome(_id: mongoose.Types.ObjectId) {
 }
 
 
+async function getWeeklyAssignments(_id: mongoose.Types.ObjectId) {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    const endOfSearch = new Date(today);
+    endOfSearch.setDate(today.getDate());
+
+    const startDate = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate());
+    const endDate = new Date(endOfSearch.getFullYear(), endOfSearch.getMonth(), endOfSearch.getDate());
+
+    const weekStartSearchDate = dayjs(startDate).format('DD-MM-YY');
+    const weekEndSearchDate = dayjs(endDate).format('DD-MM-YY');
+
+    const aggregationPipeline = [
+        {
+            $match: {
+                user_id: _id,
+                date: {
+                    $gte: startDate,
+                    $lte: endDate
+                }
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalIncome: { $sum: "$price" },
+                count: { $sum: 1 }
+            }
+        },
+    ];
+
+    const resultOfWeek = await AssignmentModel.aggregate(aggregationPipeline);
+
+    const totalAssignments = await AssignmentModel.countDocuments({ user_id: _id });
+
+    return {
+        weekStartSearchDate,
+        weekEndSearchDate,
+        totalIncome: resultOfWeek.length ? resultOfWeek[0].totalIncome : 0,
+        assignmentCount: resultOfWeek.length ? resultOfWeek[0].count : 0,
+        totalAssignments
+    };
+}
+
+
 
 
 
@@ -249,5 +296,6 @@ export default {
     updateAssignment,
     deleteAssignment,
     filterAssignments,
-    getMonthlyAverageIncome
+    getMonthlyAverageIncome,
+    getWeeklyAssignments
 }
