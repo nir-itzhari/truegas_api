@@ -21,9 +21,8 @@ async function getAllAssignments(): Promise<IAssignmentModel[]> {
 }
 
 
-async function getAssignmentsByUserId(user_id: mongoose.Types.ObjectId): Promise<IAssignmentModel[]> {
-
-    const pipeline = [
+async function getAssignmentsByUserId(user_id: mongoose.Types.ObjectId, first: number, rows: number): Promise<{ assignments: IAssignmentModel[], totalAssignments: number }> {
+    const pipeline: any[] = [
         {
             $match: {
                 user_id: user_id,
@@ -44,12 +43,22 @@ async function getAssignmentsByUserId(user_id: mongoose.Types.ObjectId): Promise
                 foreignField: '_id',
                 as: 'images'
             }
+        },
+        {
+            $sort: { date: -1 }
+        },
+        {
+            $skip: first
+        },
+        {
+            $limit: rows
         }
     ];
 
     const assignments = await AssignmentModel.aggregate(pipeline);
+    const totalAssignments = await AssignmentModel.countDocuments({ user_id: user_id });
 
-    return assignments;
+    return { assignments: assignments, totalAssignments: totalAssignments };
 }
 
 

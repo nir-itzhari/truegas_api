@@ -18,17 +18,17 @@ router.get('/assignments', verifyLoggedIn, async (request: Request, response: Re
 });
 
 
-router.get('/assignments/:user_id', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/assignments/:user_id/:first/:rows', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const ObjectUserId = new mongoose.Types.ObjectId(request.params.user_id);
-        const assignmentsByClientId = await assignmentsLogic.getAssignmentsByUserId(ObjectUserId);
+        const { first, rows } = request.params;
+        const assignmentsByClientId = await assignmentsLogic.getAssignmentsByUserId(ObjectUserId, +first, +rows);
 
         response.json(assignmentsByClientId);
     } catch (err: any) {
         next(err);
     }
-}
-);
+});
 
 
 router.post('/assignments', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
