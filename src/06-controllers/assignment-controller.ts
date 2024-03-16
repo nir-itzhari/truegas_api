@@ -18,7 +18,7 @@ router.get('/assignments', verifyLoggedIn, async (request: Request, response: Re
 });
 
 
-router.get('/assignments/:user_id/:first/:rows', async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/assignments/:user_id/:first/:rows', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const ObjectUserId = new mongoose.Types.ObjectId(request.params.user_id);
         const { first, rows } = request.params;
