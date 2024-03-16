@@ -3,7 +3,7 @@ import { IUserModel } from '../03-models/user-model';
 import crypto from 'crypto';
 import ErrorModel from '../03-models/error-model';
 
-const salt = 'MakeThingsGoRight'; // Hash salt.
+const salt = 'MakeThingsGoRight';
 const secretKey = 'AbraKadabraHokusFokus';
 
 function hash(plainText: string): string {
@@ -12,14 +12,14 @@ function hash(plainText: string): string {
   const hashedText = crypto
     .createHmac('sha512', salt)
     .update(plainText)
-    .digest('hex'); // hex --> convert to string
+    .digest('hex'); 
 
   return hashedText;
 }
 
 function getNewToken(user: IUserModel): string {
   const payload = { user };
-  const token = jwt.sign(payload, secretKey, { expiresIn: '2h' });
+  const token = jwt.sign(payload, secretKey); 
 
   return token;
 }
