@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import config from "../01-utils/config";
 
-function errorsHandler(err: any, request: Request, response: Response, next: NextFunction): void {
+const errorsHandler = (err: any, request: Request, response: Response, next: NextFunction): void => {
 
     const status = err.status || 500;
 

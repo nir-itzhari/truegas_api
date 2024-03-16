@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import ErrorModel from "../03-models/error-model";
 import cyber from "../01-utils/cyber";
 
-async function verifyLoggedIn(request: Request, response: Response, next: NextFunction): Promise<void> {
+const verifyLoggedIn = async (request: Request, response: Response, next: NextFunction): Promise<void> => {
 
     const authorizationHeader = request.header("authorization");
-
+console.log(authorizationHeader)
     const isValid = await cyber.verifyToken(authorizationHeader);
 
     if (!isValid) {
