@@ -5,7 +5,7 @@ import cyber from "../01-utils/cyber";
 const verifyLoggedIn = async (request: Request, response: Response, next: NextFunction): Promise<void> => {
 
     const authorizationHeader = request.header("authorization");
-console.log(authorizationHeader)
+
     const isValid = await cyber.verifyToken(authorizationHeader);
 
     if (!isValid) {
