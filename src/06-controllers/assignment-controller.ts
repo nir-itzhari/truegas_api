@@ -37,6 +37,7 @@ router.post('/assignments', verifyLoggedIn, async (request: Request, response: R
         const ObjectClientId = new Types.ObjectId(request.body.client_id);
         request.body.user_id = ObjectUserId;
         request.body.client_id = ObjectClientId;
+        request.body.date = new Date(request.body.date)
         request.body.imageFile = request.files?.imageFile;
         const assignment = new AssignmentModel(request.body);
         const addedAssignments = await assignmentsLogic.addAssignment(assignment);
