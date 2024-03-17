@@ -1,0 +1,10 @@
+*.env
+*.json
+*.csv
+.idea/
+node_modules/
+dist/
+yarn-error.log
+/logs
+# *.pem
+assets/
