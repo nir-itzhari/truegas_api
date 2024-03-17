@@ -4,7 +4,7 @@ import config from "../01-utils/config";
 const errorsHandler = (err: any, request: Request, response: Response, next: NextFunction): void => {
 
     const status = err.status || 500;
-
+    console.log(err.message)
     let msg;
     if (config.isDevelopment) {
         msg = err.message;
