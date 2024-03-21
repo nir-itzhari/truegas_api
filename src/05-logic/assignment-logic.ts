@@ -92,7 +92,7 @@ async function addAssignment(assignment: IAssignmentModel): Promise<IAssignmentM
         }
 
         await UserModel.findByIdAndUpdate({ _id: assignment.user_id }, { $push: { assignment_id: assignment._id } });
-
+        delete assignment.imageFile
         const savedAssignment = await new AssignmentModel(assignment).save();
 
         await ClientModel.updateMany({ _id: assignment.client_id }, { $push: { assignment_id: savedAssignment._id } }).exec();
