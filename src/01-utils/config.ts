@@ -4,7 +4,7 @@ class Config { }
 
 class DevelopmentConfig extends Config {
     public isDevelopment = true;
-    public connectionString = "mongodb://localhost:27017/truegas"
+    public connectionString = "mongodb://18.212.195.66:27017/truegas"
     public dockerConnectionString = "mongodb://db:27017/truegas"
 
 }
