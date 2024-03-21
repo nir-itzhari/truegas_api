@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import ErrorModel from "./03-models/error-model";
 import mongoose from "mongoose";
-mongoose.set('strictQuery', false);
+// mongoose.set('strictQuery', false);
 import dal from "./04-dal/dal"
-dal.connect()
+// dal.connect()
 import express, { NextFunction, Request, Response } from "express";
 import config from "./01-utils/config";
 import cors from "cors";
