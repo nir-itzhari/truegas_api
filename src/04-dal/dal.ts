@@ -18,7 +18,8 @@ const connect = async (): Promise<void> => {
         console.log("We're connected to MongoDB " + db.connections[0].name)
         isConnected = true;
     } catch (error: any) {
-        throw new ErrorModel(400, error.message)
+        console.error('Error connecting to MongoDB:', error.message);
+        throw new ErrorModel(400, error.message);
     }
 }
 
