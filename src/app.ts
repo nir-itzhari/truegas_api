@@ -20,9 +20,9 @@ import imagesController from "./06-controllers/images-controller";
 
 const expressServer = express();
 
-if (config.isDevelopment) {
-    expressServer.use(cors());
-}
+// if (config.isDevelopment) {
+//     expressServer.use(cors());
+// }
 
 expressServer.use(express.json());
 expressServer.use(fileUpload());

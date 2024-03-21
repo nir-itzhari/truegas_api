@@ -2,7 +2,6 @@ import mongoose from "mongoose"
 import config from "../01-utils/config"
 import ErrorModel from './../03-models/error-model';
 import os from 'os';
-import { IContactUsModel } from "../03-models/contact-us-model";
 
 let isConnected = false;
 
@@ -25,7 +24,7 @@ const connect = async (): Promise<void> => {
 
 
 
-export async function closeDatabaseConnection() {
+export async function closeDatabaseConnection(): Promise<void> {
     if (!isConnected) {
         console.log('Not connected to MongoDB');
         return;
@@ -42,10 +41,10 @@ export async function closeDatabaseConnection() {
 }
 
 
-process.on('SIGINT', async () => {
+process.on('SIGINT', async (): Promise<void> => {
     console.log('Received SIGINT signal, closing MongoDB connection');
     await closeDatabaseConnection();
-    process.exit(0);
+    process.exit(1);
 });
 export default {
     connect,
