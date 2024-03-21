@@ -31,7 +31,7 @@ router.get('/clients/:_id', verifyLoggedIn, async (request: Request, response: R
 }
 );
 
-router.get('/clients/search/:_id/:fullName/:city/:street', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.get('/clients/search/:_id/:fullName/:city/:street/:first/:rows', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
         const _id = new mongoose.Types.ObjectId(request.params._id)
         const clients = await clientLogic.getClientByQuery(request.params, _id);

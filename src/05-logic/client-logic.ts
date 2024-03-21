@@ -76,7 +76,7 @@ async function getClientById(_id: mongoose.Types.ObjectId): Promise<IClientModel
 
 
 async function getClientByQuery(parameters: any, _id: mongoose.Types.ObjectId): Promise<IClientModel[]> {
-    const { fullName, city, street } = parameters;
+    const { fullName, city, street, first, rows } = parameters;
 
     const conditions: any[] = [{ user_id: _id }];
 
@@ -95,7 +95,59 @@ async function getClientByQuery(parameters: any, _id: mongoose.Types.ObjectId): 
         conditions.push({ street: streetRegex });
     }
 
-    const pipeline: any[] = [{ $match: { $and: conditions } }, { $project: { createdAt: 0 } }];
+    const pipeline: any[] = [
+        { $match: { $and: conditions } },
+        {
+            $lookup: {
+                from: 'assignment',
+                let: { clientId: '$_id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $eq: ['$client_id', '$$clientId'] }
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'images',
+                            localField: 'image_id',
+                            foreignField: '_id',
+                            as: 'images',
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            date: 1,
+                            title: 1,
+                            description: 1,
+                            price: 1,
+                            isDone: 1,
+                            images: { _id: 1, name: 1 }
+                        }
+                    }
+                ],
+                as: 'assignments',
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                fullName: 1,
+                city: 1,
+                street: 1,
+                buildingNumber: 1,
+                apartmentNumber: 1,
+                floor: 1,
+                phoneNumber: 1,
+                images: { _id: 1, name: 1 },
+                assignments: 1,
+            },
+        },
+        { $project: { createdAt: 0 } },
+        { $skip: +first },
+        { $limit: +rows }
+    ];
 
     const clients = await ClientModel.aggregate(pipeline);
 
