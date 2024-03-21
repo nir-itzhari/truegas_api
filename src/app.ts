@@ -1,10 +1,7 @@
 import dotenv from "dotenv";
-dotenv.config();
 import ErrorModel from "./03-models/error-model";
 import mongoose from "mongoose";
-// mongoose.set('strictQuery', false);
 import dal from "./04-dal/dal"
-// dal.connect()
 import express, { NextFunction, Request, Response } from "express";
 import config from "./01-utils/config";
 import cors from "cors";
@@ -16,6 +13,9 @@ import clientController from "./06-controllers/client-controller";
 import userController from "./06-controllers/user-controller";
 import checkStatusController from "./06-controllers/check-status-controller";
 import imagesController from "./06-controllers/images-controller";
+mongoose.set('strictQuery', false);
+dotenv.config();
+dal.connect()
 
 
 const expressServer = express();
