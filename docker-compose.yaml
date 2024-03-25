@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  backend-service:
+  backend:
     image: niritz/truegas
     hostname: truegasdocker
     container_name: server
