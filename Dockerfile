@@ -16,4 +16,4 @@ EXPOSE 3001
 
 CMD ["npm", "start"]
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl --fail http://localhost:3001/ || exit 1
+# HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl --fail http://localhost:3001/ || exit 1
