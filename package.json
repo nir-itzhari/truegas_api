@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "ts-node src/app.ts"
-  },
+    "start": "nodemon --legacy-watch --exec ts-node src/app.ts"
+},
   "dependencies": {
     "cors": "^2.8.5",
     "dayjs": "^1.11.10",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-fileupload": "^1.4.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.9.2",
     "mongoose": "^6.12.6",
     "nodemailer": "^6.9.9",
