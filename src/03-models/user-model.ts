@@ -3,6 +3,8 @@ import { Document, model, Schema } from 'mongoose';
 
 export interface IUserModel extends Document {
   email: string;
+  firstName: string;
+  lastName: string;
   password: string;
   clients_id?: Schema.Types.ObjectId[];
   resetToken: string;
@@ -15,6 +17,14 @@ const UserSchema = new Schema<IUserModel>(
       type: String,
       required: [true, 'נא להזין אימייל'],
       unique: true,
+    },
+    firstName: {
+      type: String,
+      required: [true, 'נא להזין שם פרטי']
+    },
+    lastName: {
+      type: String,
+      required: [true, 'נא להזין שם משפחה']
     },
     password: {
       type: String,
