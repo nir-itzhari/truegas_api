@@ -1,10 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
-import ErrorModel from "./03-models/error-model";
+
 import mongoose from "mongoose";
 mongoose.set('strictQuery', false);
+
 import dal from "./04-dal/dal"
 dal.connect()
+
 import express, { NextFunction, Request, Response } from "express";
 import config from "./01-utils/config";
 import cors from "cors";
@@ -16,9 +18,22 @@ import clientController from "./06-controllers/client-controller";
 import userController from "./06-controllers/user-controller";
 import checkStatusController from "./06-controllers/check-status-controller";
 import imagesController from "./06-controllers/images-controller";
-
+import expressRateLimit from "express-rate-limit"
+import ErrorModel from "./03-models/error-model";
+import path from "path";
+import https from "https"
+import fs from "fs"
 
 const expressServer = express();
+
+
+expressServer.use("/", expressRateLimit({
+    windowMs: 1000,
+    max: 10,
+    message: "something went wrong, please try again" // 429 too many requests
+}))
+
+
 
 if (config.isDevelopment) {
     expressServer.use(cors());
@@ -39,3 +54,9 @@ expressServer.use("*", (request: Request, response: Response, next: NextFunction
 
 expressServer.use(errorsHandler);
 expressServer.listen(process.env.PORT, () => console.log("Listening... PORT: " + process.env.PORT));
+
+// const sslServer = https.createServer({
+//     key: fs.readFileSync(path.join(__dirname, "..", "cert", "64587237_truegas.com.key")),
+//     cert: fs.readFileSync(path.join(__dirname, "..", "cert", "64587237_truegas.com.cert"))
+// }, expressServer);
+// sslServer.listen(process.env.PORT, () => console.log("Listening... port " + process.env.PORT));
