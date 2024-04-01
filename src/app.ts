@@ -27,11 +27,11 @@ import fs from "fs"
 const expressServer = express();
 
 
-expressServer.use("/", expressRateLimit({
-    windowMs: 2000,
-    max: 20,
-    message: "something went wrong, please try again" // 429 too many requests
-}))
+// expressServer.use("/", expressRateLimit({
+//     windowMs: 2000,
+//     max: 20,
+//     message: "something went wrong, please try again" // 429 too many requests
+// }))
 
 
 
