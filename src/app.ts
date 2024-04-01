@@ -28,16 +28,16 @@ const expressServer = express();
 
 
 expressServer.use("/", expressRateLimit({
-    windowMs: 1000,
-    max: 10,
+    windowMs: 2000,
+    max: 20,
     message: "something went wrong, please try again" // 429 too many requests
 }))
 
 
 
-if (config.isDevelopment) {
-    expressServer.use(cors());
-}
+// if (config.isDevelopment) {
+//     expressServer.use(cors());
+// }
 
 expressServer.use(express.json());
 expressServer.use(fileUpload());
