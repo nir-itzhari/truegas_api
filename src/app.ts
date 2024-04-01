@@ -35,9 +35,9 @@ expressServer.use("/", expressRateLimit({
 
 
 
-// if (config.isDevelopment) {
-//     expressServer.use(cors());
-// }
+if (config.isDevelopment) {
+    expressServer.use(cors());
+}
 
 expressServer.use(express.json());
 expressServer.use(fileUpload());
