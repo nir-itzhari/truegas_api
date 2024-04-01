@@ -14,7 +14,7 @@ services:
     depends_on:
       - db
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - MONGODB_URI=mongodb://db:8000/truegas
     volumes:
       - ./:/app
