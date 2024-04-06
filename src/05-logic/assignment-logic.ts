@@ -104,7 +104,7 @@ async function addAssignment(assignment: IAssignmentModel): Promise<IAssignmentM
 
         return populatedAssignment;
 
-    } catch (error) {
+    } catch (error: any) {
         throw new ErrorModel(400, error.message);
     }
 }
@@ -176,21 +176,24 @@ async function updateAssignment(assignment_id: mongoose.Types.ObjectId, assignme
 }
 
 
-async function deleteAssignment(_id: Schema.Types.ObjectId): Promise<void> {
+async function deleteAssignment(_id: mongoose.Types.ObjectId): Promise<void> {
     const assignment = await AssignmentModel.findById(_id);
     if (!assignment) {
         throw new ErrorModel(404, `משימה לא נמצאה`);
     }
-    const imageIds = assignment.image_id;
 
-    for (let i = 0; i < imageIds.length; i++) {
-        await imageLogic.deleteImage(imageIds[i])
-    }
-    try {
-        await AssignmentModel.findByIdAndDelete(_id).exec();
+    if (assignment.image_id) {
+        const imageIds = assignment.image_id;
 
-    } catch (error) {
-        throw new ErrorModel(400, error.message);
+        for (let i = 0; i < imageIds.length; i++) {
+            await imageLogic.deleteImage(imageIds[i])
+        }
+        try {
+            await AssignmentModel.findByIdAndDelete(_id).exec();
+
+        } catch (error) {
+            throw new ErrorModel(400, error.message);
+        }
     }
 }
 

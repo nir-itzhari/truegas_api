@@ -22,24 +22,28 @@ export interface IAssignmentModel extends Document {
 const AssignmentSchema = new Schema<IAssignmentModel>({
     date: {
         type: Date,
+        required: true
     },
     description: {
         type: String,
         minlength: [2, 'Too short.'],
         maxlength: [10000, 'Too long.'],
-        trim: true
+        trim: true,
+        required: true
     },
     title: {
         type: String,
         minlength: [2, 'Too short.'],
         maxlength: [10000, 'Too long.'],
-        trim: true
+        trim: true,
+        required: true
     },
     client_id: {
         type: Schema.Types.ObjectId,
     },
     user_id: {
         type: Schema.Types.ObjectId,
+        required: true
     },
     image_id: {
         type: [mongoose.Types.ObjectId],
@@ -49,10 +53,12 @@ const AssignmentSchema = new Schema<IAssignmentModel>({
         type: [Object]
     },
     isDone: {
-        type: Boolean
+        type: Boolean,
+        required: true
     },
     price: {
-        type: Number
+        type: Number,
+        required: true
     },
     createdAt: Date
     ,

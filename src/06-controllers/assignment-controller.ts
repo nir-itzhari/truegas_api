@@ -64,11 +64,10 @@ router.put('/assignments/:_id', verifyLoggedIn, async (request: Request, respons
 );
 
 
-router.delete('/assignments/:image_id', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+router.delete('/assignments/:_id', verifyLoggedIn, async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-        const _id = new mongoose.Types.ObjectId(request.params.image_id)
-        await imageLogic.deleteImage(_id)
-
+        const _id = new mongoose.Types.ObjectId(request.params._id)
+        await assignmentsLogic.deleteAssignment(_id)
         response.sendStatus(204)
     } catch (err) {
         next(err);
