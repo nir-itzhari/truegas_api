@@ -15,9 +15,9 @@ const CredentialsSchema = new Schema<ICredentialsModel>(
     },
     password: {
       type: String,
-      required: [true, 'Missing Password'],
-      minlength: [5, 'Password Too Short.'],
-      maxlength: [8, 'Password Too long.'],
+      required: [true, 'נא להזין סיסמה'],
+      minlength: [5, 'אורך סיסמה מינימום 5 תווים'],
+      maxlength: [30, 'אורך סיסמה עד 30 תווים'],
       trim: true,
     },
   },

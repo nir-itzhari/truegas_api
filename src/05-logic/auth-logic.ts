@@ -37,10 +37,9 @@ async function login(credentials: ICredentialsModel): Promise<string> {
 
   try {
     await credentials.validate();
-  } catch (error) {
-    throw new ErrorModel(400, error.message);
+  } catch (error: any) {
+    throw new ErrorModel(400, error.errors.password.message);
   }
-
   // Hash password:
   credentials.password = cyber.hash(credentials.password);
 
