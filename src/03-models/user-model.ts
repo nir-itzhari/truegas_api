@@ -6,7 +6,6 @@ export interface IUserModel extends Document {
   firstName: string;
   lastName: string;
   password: string;
-  clients_id?: Schema.Types.ObjectId[];
   resetToken: string;
   createdAt: string | Date;
 }
@@ -32,9 +31,6 @@ const UserSchema = new Schema<IUserModel>(
       minlength: [4, 'Password Too Short.'],
       maxlength: [150, 'Password Too long.'],
       trim: true,
-    },
-    clients_id: {
-      type: [Schema.Types.ObjectId],
     },
     resetToken: {
       type: String
