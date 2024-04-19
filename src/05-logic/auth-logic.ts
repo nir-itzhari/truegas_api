@@ -2,6 +2,7 @@ import { ICredentialsModel } from '../03-models/credentials-model';
 import { IUserModel, UserModel } from '../03-models/user-model';
 import ErrorModel from '../03-models/error-model';
 import cyber from '../01-utils/cyber';
+import logger from '../01-utils/logger';
 
 async function isUserIdFree(email: string): Promise<boolean> {
   const count = await UserModel.countDocuments({ email: email }).exec();
@@ -49,7 +50,9 @@ async function login(credentials: ICredentialsModel): Promise<string> {
   }).exec();
 
   if (users.length === 0) {
+    logger.log(`Email Input: ${credentials.email}\nError Message: שם משתמש או סיסמה אינם נכונים`);
     throw new ErrorModel(401, 'שם משתמש או סיסמה אינם נכונים');
+
   }
 
   const user = users[0];
