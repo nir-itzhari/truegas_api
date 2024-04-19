@@ -50,7 +50,7 @@ async function deleteImage(imageId: mongoose.Types.ObjectId): Promise<void> {
             await AssignmentModel.findByIdAndUpdate(assignment._id, { $set: { image_id: assignment.image_id } }).exec();
         }
     } catch (error) {
-        throw new ErrorModel(500, error.message);
+        console.error(`Failed to delete image with ID: ${imageId}`);
     }
 }
 
